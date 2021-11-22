@@ -9,6 +9,16 @@ var indexRouter = require('./routes/index');
 var app = express();
 
 
+//middleware
+tokenMiddleware = (req, res, next) => {
+  if (req.headers.token != 'mytoken'){
+    res.status(403).send({error: "wrong token"})
+  }    
+  else
+    next()
+  }
+app.use(tokenMiddleware);
+
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -33,5 +43,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 module.exports = app;
